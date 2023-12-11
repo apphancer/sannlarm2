@@ -49,8 +49,6 @@ class DimTestCommand extends Command
             // ...
         }
 
-        $this->tuyaClient->setToken();
-
         $deviceStatus = $this->tuyaClient->deviceStatus();
 
         dd($deviceStatus);

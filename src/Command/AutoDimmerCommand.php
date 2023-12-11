@@ -48,8 +48,6 @@ class AutoDimmerCommand extends Command
             // ...
         }
 
-        $this->tuyaClient->setToken();
-
         $dimmingTimeInSeconds = 8 * 60; // 8 minutes
         $finalValue           = 255;
         $intervalDuration     = 2;
