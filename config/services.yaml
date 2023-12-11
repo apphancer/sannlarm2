@@ -4,6 +4,11 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    tuya_access_id: "%env(string:TUYA_ACCESS_ID)%"
+    tuya_secret_key: "%env(string:TUYA_SECRET_KEY)%"
+    tuya_device_id: "%env(string:TUYA_DEVICE_ID)%"
+    dimming_time_seconds: "%env(integer:DIMMING_TIME_SECONDS)%"
+
 
 services:
     # default configuration for services in *this* file
@@ -19,6 +24,12 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
+    App\Client\TuyaClient:
+        arguments:
+            - '%tuya_access_id%'
+            - '%tuya_secret_key%'
+            - '%tuya_device_id%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
