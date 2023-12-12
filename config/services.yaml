@@ -30,6 +30,7 @@ services:
             - '%tuya_access_id%'
             - '%tuya_secret_key%'
             - '%tuya_device_id%'
+            - '%dimming_time_seconds%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

@@ -2,9 +2,15 @@
 
 namespace App\Client;
 
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\KernelInterface;
 use tuyapiphp\TuyaApi;
+
+use function floor;
+use function pow;
+use function sleep;
+use function sprintf;
 
 class TuyaClient
 {
@@ -18,10 +24,11 @@ class TuyaClient
         private readonly string $accessId,
         private readonly string $secretKey,
         private readonly string $deviceId,
+        private readonly int $dimmingTimeSeconds,
         private readonly KernelInterface $appKernel
     ) {
-        $this->tokenFilePath = $this->appKernel->getProjectDir() . '/var/token.json';
-        $this->filesystem = new Filesystem();
+        $this->tokenFilePath = $this->appKernel->getProjectDir().'/var/token.json';
+        $this->filesystem    = new Filesystem();
     }
 
     public function postCommands(array $commands): void
@@ -39,6 +46,41 @@ class TuyaClient
         return $tuya->devices($this->token)->get_status($this->deviceId);
     }
 
+    public function dimLight(SymfonyStyle $io = null): void
+    {
+        $minValue         = 25;
+        $maxValue         = 255;
+        $intervalDuration = 2;
+        $previousValue    = $minValue;
+
+        $intervals  = $this->dimmingTimeSeconds / $intervalDuration;
+        $growthRate = pow($maxValue / $minValue, 1 / $intervals);
+
+        $this->postCommands([
+            ['code' => 'bright_value', 'value' => $minValue],
+            ['code' => 'switch_led', 'value' => true],
+        ]);
+
+        for ($i = $minValue; $i <= $maxValue;) {
+            $i = $i * $growthRate;
+
+            $minValue = floor($i);
+
+            if ($previousValue !== $minValue) {
+                $previousValue = $minValue;
+
+                $io?->writeln(sprintf('Dimming to %s', $minValue));
+                echo sprintf('Dimming to %s', $minValue);
+
+                $this->postCommands([
+                    ['code' => 'bright_value', 'value' => $minValue],
+                ]);
+            }
+
+            sleep($intervalDuration);
+        }
+    }
+
     private function getTuyaApi(): TuyaApi
     {
         $config = [
@@ -52,11 +94,11 @@ class TuyaClient
 
     private function setToken(): void
     {
-        $tuya = $this->getTuyaApi();
+        $tuya     = $this->getTuyaApi();
         $response = $tuya->token->get_new();
 
         if (isset($response->result->access_token, $response->result->expire_time)) {
-            $this->token = $response->result->access_token;
+            $this->token           = $response->result->access_token;
             $this->tokenExpiration = time() + $response->result->expire_time;
 
             $this->filesystem->dumpFile(
@@ -71,8 +113,8 @@ class TuyaClient
     private function validateToken(): void
     {
         if ($this->filesystem->exists($this->tokenFilePath)) {
-            $data = json_decode(file_get_contents($this->tokenFilePath), true);
-            $this->token = $data['token'] ?? null;
+            $data                  = json_decode(file_get_contents($this->tokenFilePath), true);
+            $this->token           = $data['token'] ?? null;
             $this->tokenExpiration = $data['expiration'] ?? null;
         }
 
