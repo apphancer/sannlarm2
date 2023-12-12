@@ -7,7 +7,7 @@ parameters:
     tuya_access_id: "%env(string:TUYA_ACCESS_ID)%"
     tuya_secret_key: "%env(string:TUYA_SECRET_KEY)%"
     tuya_device_id: "%env(string:TUYA_DEVICE_ID)%"
-    dimming_time_seconds: "%env(integer:DIMMING_TIME_SECONDS)%"
+    dimming_time_seconds: "%env(int:DIMMING_TIME_SECONDS)%"
 
 
 services:
