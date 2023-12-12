@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Client\TuyaClient;
+use App\Service\TuyaService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -11,21 +11,16 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-use function sleep;
-
 #[AsCommand(
     name: 'app:auto-dimmer',
     description: 'Add a short description for your command',
 )]
 class AutoDimmerCommand extends Command
 {
-    private TuyaClient $tuyaClient;
 
-    public function __construct(TuyaClient $tuyaClient)
+    public function __construct(private readonly TuyaService $tuyaService)
     {
         parent::__construct();
-
-        $this->tuyaClient = $tuyaClient;
     }
 
     protected function configure(): void
@@ -50,7 +45,7 @@ class AutoDimmerCommand extends Command
 
         $io->success('The sun is rising ☀️');
 
-        $this->tuyaClient->dimLight($io);
+        $this->tuyaService->dimLight($io);
 
         $io->success('The sun is up ☀☀☀☀☀️');
 

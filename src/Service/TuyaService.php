@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Client;
+namespace App\Service;
 
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
@@ -12,7 +12,7 @@ use function pow;
 use function sleep;
 use function sprintf;
 
-class TuyaClient
+class TuyaService
 {
     private ?string $token = null;
     private ?int $tokenExpiration = null;

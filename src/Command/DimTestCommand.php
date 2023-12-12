@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Client\TuyaClient;
+use App\Service\TuyaService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -10,7 +10,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use tuyapiphp\TuyaApi;
 
 use function dd;
 
@@ -20,13 +19,9 @@ use function dd;
 )]
 class DimTestCommand extends Command
 {
-    private TuyaClient $tuyaClient;
-
-    public function __construct(TuyaClient $tuyaClient)
+    public function __construct(private readonly TuyaService $tuyaService)
     {
         parent::__construct();
-
-        $this->tuyaClient = $tuyaClient;
     }
 
     protected function configure(): void
@@ -49,7 +44,7 @@ class DimTestCommand extends Command
             // ...
         }
 
-        $deviceStatus = $this->tuyaClient->deviceStatus();
+        $deviceStatus = $this->tuyaService->deviceStatus();
 
         dd($deviceStatus);
 
@@ -60,7 +55,7 @@ class DimTestCommand extends Command
             ['code' => 'colour_data', 'value' => '{"h":1.0,"s":255.0,"v":255.0}'], // @todo[m]: turn on
         ];
 
-        $result = $this->tuyaClient
+        $result = $this->tuyaService
             ->devices($token)
             ->post_commands($deviceId, ['commands' => $commands]);
 
