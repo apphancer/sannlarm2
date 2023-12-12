@@ -48,33 +48,11 @@ class AutoDimmerCommand extends Command
             // ...
         }
 
-        $dimmingTimeInSeconds = 8 * 60; // 8 minutes
-        $finalValue           = 255;
-        $intervalDuration     = 2;
-        $currentValue         = 25;
-        $previousValue        = $currentValue;
+        $io->success('The sun is rising ☀️');
 
-        $intervals  = $dimmingTimeInSeconds / $intervalDuration;
-        $growthRate = pow($finalValue / $currentValue, 1 / $intervals);
+        $this->tuyaClient->dimLight($io);
 
-        for ($i = $currentValue; $i <= $finalValue;) {
-            $i = $i * $growthRate;
-
-            $currentValue = floor($i);
-
-            if ($previousValue !== $currentValue) {
-                $previousValue = $currentValue;
-                $io->writeln(sprintf('Dimming to %s', $currentValue));
-
-                $this->tuyaClient->postCommands([
-                    ['code' => 'bright_value', 'value' => $currentValue],
-                ]);
-            }
-
-            sleep($intervalDuration);
-        }
-
-        $io->success('The sun is up ☀️');
+        $io->success('The sun is up ☀☀☀☀☀️');
 
         return Command::SUCCESS;
     }
