@@ -2,18 +2,26 @@
 
 namespace App\Client;
 
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpKernel\KernelInterface;
 use tuyapiphp\TuyaApi;
 
 class TuyaClient
 {
     private ?string $token = null;
     private ?int $tokenExpiration = null;
+    private string $tokenFilePath;
+    private Filesystem $filesystem;
+
 
     public function __construct(
         private readonly string $accessId,
         private readonly string $secretKey,
-        private readonly string $deviceId
+        private readonly string $deviceId,
+        private readonly KernelInterface $appKernel
     ) {
+        $this->tokenFilePath = $this->appKernel->getProjectDir() . '/var/token.json';
+        $this->filesystem = new Filesystem();
     }
 
     public function postCommands(array $commands): void
@@ -44,19 +52,16 @@ class TuyaClient
 
     private function setToken(): void
     {
-        $tuya     = $this->getTuyaApi();
+        $tuya = $this->getTuyaApi();
         $response = $tuya->token->get_new();
 
         if (isset($response->result->access_token, $response->result->expire_time)) {
-            $this->token           = $response->result->access_token;
+            $this->token = $response->result->access_token;
             $this->tokenExpiration = time() + $response->result->expire_time;
 
-            file_put_contents(
-                'token.json',
-                json_encode([
-                    'token'      => $this->token,
-                    'expiration' => $this->tokenExpiration,
-                ])
+            $this->filesystem->dumpFile(
+                $this->tokenFilePath,
+                json_encode(['token' => $this->token, 'expiration' => $this->tokenExpiration])
             );
         } else {
             throw new \Exception("Failed to retrieve token.");
@@ -65,9 +70,9 @@ class TuyaClient
 
     private function validateToken(): void
     {
-        if (file_exists('token.json')) {
-            $data                  = json_decode(file_get_contents('token.json'), true);
-            $this->token           = $data['token'] ?? null;
+        if ($this->filesystem->exists($this->tokenFilePath)) {
+            $data = json_decode(file_get_contents($this->tokenFilePath), true);
+            $this->token = $data['token'] ?? null;
             $this->tokenExpiration = $data['expiration'] ?? null;
         }
 
