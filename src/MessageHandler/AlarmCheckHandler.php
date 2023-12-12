@@ -17,6 +17,7 @@ readonly final class AlarmCheckHandler
 
     public function __invoke(AlarmCheck $alarmCheck): void
     {
+        dump('Alarm Checked');
         if ($this->alarmService->isActivated()) {
             dump('Alarm Activated!');
             $this->tuyaClient->dimLight();

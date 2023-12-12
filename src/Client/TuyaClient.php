@@ -69,8 +69,12 @@ class TuyaClient
             if ($previousValue !== $minValue) {
                 $previousValue = $minValue;
 
-                $io?->writeln(sprintf('Dimming to %s', $minValue));
-                echo sprintf('Dimming to %s', $minValue);
+                $output = sprintf('Dimming to %s', $minValue);
+                if (null !== $io) {
+                    $io->writeln($output);
+                } else {
+                    dump($output);
+                }
 
                 $this->postCommands([
                     ['code' => 'bright_value', 'value' => $minValue],
