@@ -2,7 +2,4 @@
 
 namespace App\Message;
 
-class AlarmCheck
-{
-
-}
+readonly final class AlarmCheck {}
