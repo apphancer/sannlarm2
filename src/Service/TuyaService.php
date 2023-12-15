@@ -69,7 +69,8 @@ class TuyaService
             if ($previousValue !== $minValue) {
                 $previousValue = $minValue;
 
-                $output = sprintf('Dimming to %s', $minValue);
+                $output = sprintf('%s: %s', date('H:i:s'), $minValue);
+
                 if (null !== $io) {
                     $io->writeln($output);
                 } else {
@@ -79,6 +80,14 @@ class TuyaService
                 $this->postCommands([
                     ['code' => 'bright_value', 'value' => $minValue],
                 ]);
+            } else {
+                $output = sprintf('%s: %s', date('H:i:s'), null);
+
+                if (null !== $io) {
+                    $io->writeln($output);
+                } else {
+                    dump($output);
+                }
             }
 
             sleep($intervalDuration);
