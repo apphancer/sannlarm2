@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f9a6b6f5e69f2eb929306092d2f5a43f",
+    "content-hash": "df13ab2fde314cf259732cd163392055",
     "packages": [
         {
             "name": "doctrine/deprecations",
@@ -5662,20 +5662,20 @@
         },
         {
             "name": "tuyapiphp/tuyapiphp",
-            "version": "1.1.2",
+            "version": "dev-php82-deprecation-fix",
             "source": {
                 "type": "git",
-                "url": "https://github.com/ground-creative/tuyapiphp.git",
-                "reference": "4aa749ef1eff30abcd87d244a40c91009dd2627d"
+                "url": "https://github.com/apphancer/tuyapiphp.git",
+                "reference": "dfa78bb5d66987207c543c6eefd121ef1a4280a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ground-creative/tuyapiphp/zipball/4aa749ef1eff30abcd87d244a40c91009dd2627d",
-                "reference": "4aa749ef1eff30abcd87d244a40c91009dd2627d",
+                "url": "https://api.github.com/repos/apphancer/tuyapiphp/zipball/dfa78bb5d66987207c543c6eefd121ef1a4280a8",
+                "reference": "dfa78bb5d66987207c543c6eefd121ef1a4280a8",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3"
+                "php": ">=8.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "*"
@@ -5686,7 +5686,6 @@
                     "tuyapiphp\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-3.0-or-later"
             ],
@@ -5699,14 +5698,13 @@
             ],
             "description": "Tuya cloud api home management php client",
             "keywords": [
-                "Tuya",
-                "smart life"
+                "smart life",
+                "tuya"
             ],
             "support": {
-                "issues": "https://github.com/ground-creative/tuyapiphp/issues",
-                "source": "https://github.com/ground-creative/tuyapiphp/tree/v1.1.2"
+                "source": "https://github.com/apphancer/tuyapiphp/tree/php82-deprecation-fix"
             },
-            "time": "2023-10-02T17:54:41+00:00"
+            "time": "2023-12-15T11:16:09+00:00"
         },
         {
             "name": "twig/extra-bundle",
@@ -8397,7 +8395,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "tuyapiphp/tuyapiphp": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

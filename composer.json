@@ -37,7 +37,7 @@
         "symfony/validator": "7.0.*",
         "symfony/web-link": "7.0.*",
         "symfony/yaml": "7.0.*",
-        "tuyapiphp/tuyapiphp": "^1.1",
+        "tuyapiphp/tuyapiphp": "dev-php82-deprecation-fix",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
     },
@@ -99,5 +99,11 @@
         "symfony/phpunit-bridge": "^7.0",
         "symfony/stopwatch": "7.0.*",
         "symfony/web-profiler-bundle": "7.0.*"
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/apphancer/tuyapiphp"
+        }
+    ]
 }
